@@ -12,8 +12,7 @@ if(NOT FORCE_BUILD_VENDOR_PKG)
   find_package(TinyXML)
 endif()
 
-
-if (NOT TinyXML_FOUND)
+if(NOT TinyXML_FOUND)
   set(extra_cmake_args)
 
   if(DEFINED CMAKE_BUILD_TYPE)
@@ -26,18 +25,19 @@ if (NOT TinyXML_FOUND)
     URL https://downloads.sourceforge.net/project/tinyxml/tinyxml/2.6.2/tinyxml_2_6_2.tar.gz
     URL_MD5 c1b864c96804a10526540c664ade67f0
     CMAKE_ARGS
-      -DBUILD_SHARED_LIBS=ON
-      -DCMAKE_INSTALL_PREFIX=${CMAKE_CURRENT_BINARY_DIR}/tinyxml_install
-      -DCMAKE_C_COMPILER=${CMAKE_C_COMPILER}
-      -DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER}
-      -DCMAKE_CXX_FLAGS=${CMAKE_CXX_FLAGS}
-      ${extra_cmake_args}
+    -DBUILD_SHARED_LIBS=ON
+    -DCMAKE_INSTALL_PREFIX=${CMAKE_CURRENT_BINARY_DIR}/tinyxml_install
+    -DCMAKE_C_COMPILER=${CMAKE_C_COMPILER}
+    -DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER}
+    -DCMAKE_CXX_FLAGS=${CMAKE_CXX_FLAGS}
+    -DCMAKE_C_FLAGS=${CMAKE_C_FLAGS}
+    ${extra_cmake_args}
     INSTALL_DIR "${CMAKE_CURRENT_BINARY_DIR}/tinyxml_install"
     PATCH_COMMAND
     ${CMAKE_COMMAND} -E chdir <SOURCE_DIR> git apply -p1 --ignore-space-change --whitespace=nowarn ${CMAKE_CURRENT_SOURCE_DIR}/enforce-use-stl.patch
     COMMAND
     ${CMAKE_COMMAND} -E copy "${CMAKE_CURRENT_SOURCE_DIR}/tinyxml_cmakelists.txt" <SOURCE_DIR>/CMakeLists.txt
-    )
+  )
 
   # The external project will install to the build folder, but we'll install that on make install.
   install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/tinyxml_install/ DESTINATION ${CMAKE_INSTALL_PREFIX})
